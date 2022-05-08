@@ -23,7 +23,9 @@ jobs:
             mv composer.phar /usr/local/bin/composer
       - run:
           name: composer install
-          command: /usr/local/bin/composer install -n --prefer-dist
+          command: |
+            cd src
+            /usr/local/bin/composer install -n --prefer-dist
       - run:
           name: GCP Auth
           command: |
