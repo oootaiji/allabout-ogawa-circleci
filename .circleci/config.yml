@@ -13,7 +13,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: install
+          name: tool install
           command: |
             apt update && apt install -y software-properties-common
             php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
@@ -22,9 +22,10 @@ jobs:
             php -r "unlink('composer-setup.php');"
             mv composer.phar /usr/local/bin/composer
       - run:
-          name: composer install
+          name: app install
           command: |
             cd src
+            echo "$LARAVEL_ENV" | base64 --decode > .env
             /usr/local/bin/composer install -n --prefer-dist
       - run:
           name: GCP Auth
