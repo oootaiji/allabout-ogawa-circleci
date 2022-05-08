@@ -24,23 +24,17 @@ jobs:
       - run:
           name: app install
           command: |
-            echo $LARAVEL_ENV
-            echo 'hoge'
-
             cd src
             echo $LARAVEL_ENV | base64 --decode > .env
             /usr/local/bin/composer install -n --prefer-dist
-      - run:
-          name: GCP Auth
-          command: |
-            echo $GKE_SERVICE_KEY > gcloud-service-key.json
-            gcloud auth activate-service-account --key-file gcloud-service-key.json
-            gcloud auth configure-docker us-east1-docker.pkg.dev
       - run:
           name: gcloud install
           command: |
             curl -s https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-370.0.0-darwin-x86_64.tar.gz?hl=ja | tar xz
             source ./google-cloud-sdk/path.bash.inc
+            echo $GKE_SERVICE_KEY > gcloud-service-key.json
+            gcloud auth activate-service-account --key-file gcloud-service-key.json
+            gcloud auth configure-docker us-east1-docker.pkg.dev
             gcloud components install kubectl
             gcloud config set project o-taiji
             gcloud config set compute/zone us-west1-a
