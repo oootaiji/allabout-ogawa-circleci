@@ -25,7 +25,7 @@ jobs:
           name: app install
           command: |
             cd src
-            echo "$LARAVEL_ENV" | base64 --decode > .env
+            echo -n "$LARAVEL_ENV" | base64 --decode > .env
             /usr/local/bin/composer install -n --prefer-dist
       - run:
           name: GCP Auth
