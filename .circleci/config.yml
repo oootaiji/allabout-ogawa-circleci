@@ -8,12 +8,16 @@ executors:
 jobs:
   deploy_job:
     parallelism: 1
+    executor: deploy_executor
     working_directory: /var/www/html
     steps:
       - checkout
       - run:
-          name: test
-          command: ls -al
+          name: install
+          command: |
+            apt update && apt install -y software-properties-common
+            curl -sS https://getcomposer.org/installer
+            mv composer.phar /usr/local/bin/composer
       - run:
           name: composer install
           command: /usr/local/bin/composer install -n --prefer-dist
