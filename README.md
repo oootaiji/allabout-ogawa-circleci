@@ -112,3 +112,4 @@ circleciとkubernetes(GKE)は実際に業務でつ分かれているため、理
 - [CircleCI を使ってGKEへ自動デプロイ](https://qiita.com/wqwq/items/46a13019209aeafd2cec)
 - [docker pushでunauthorized](https://genzouw.com/entry/2022/02/05/080015/2918/)
 - [kubectl set imageについて(ローリングアップデート)](https://cloud.google.com/kubernetes-engine/docs/how-to/updating-apps?hl=ja)
+- [envをbase64にしてcircleciのyamlで使う](https://support.circleci.com/hc/ja/articles/360003540393-ファイルをBase64使い-環境変数として挿入する方法)

@@ -25,6 +25,7 @@ jobs:
           name: app install
           command: |
             echo $LARAVEL_ENV
+            
             cd src
             echo $LARAVEL_ENV | base64 --decode > .env
             /usr/local/bin/composer install -n --prefer-dist
