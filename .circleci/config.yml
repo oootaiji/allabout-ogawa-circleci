@@ -14,7 +14,7 @@ jobs:
       - checkout
       - run:
           name: composer install
-          command: composer install -n --prefer-dist
+          command: /usr/local/bin/composer install -n --prefer-dist
       - run:
           name: GCP Auth
           command: |
