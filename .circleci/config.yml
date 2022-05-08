@@ -29,6 +29,14 @@ jobs:
             echo $LARAVEL_ENV | base64 --decode > .env
             /usr/local/bin/composer install -n --prefer-dist
       - run:
+          name: build image
+          command: |
+            docker build -t us-east1-docker.pkg.dev/o-taiji/allabout-ogawa-kubernetes/app:${CIRCLE_SHA1} .
+      - run:
+          name: push image
+          command: |
+            docker push us-east1-docker.pkg.dev/o-taiji/allabout-ogawa-kubernetes/app:${CIRCLE_SHA1}
+      - run:
           name: gcloud install
           command: |
             curl -s https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-370.0.0-darwin-x86_64.tar.gz?hl=ja | tar xz
@@ -40,14 +48,6 @@ jobs:
             gcloud config set project o-taiji
             gcloud config set compute/region us-west1
             gcloud container clusters get-credentials allabout-ogawa-kubernetes
-      - run:
-          name: build image
-          command: |
-            docker build -t us-east1-docker.pkg.dev/o-taiji/allabout-ogawa-kubernetes/app:${CIRCLE_SHA1} .
-      - run:
-          name: push image
-          command: |
-            docker push us-east1-docker.pkg.dev/o-taiji/allabout-ogawa-kubernetes/app:${CIRCLE_SHA1}
       - run:
           name: deploy
           command: |
