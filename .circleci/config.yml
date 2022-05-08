@@ -12,8 +12,6 @@ jobs:
     working_directory: /var/www/html
     steps:
       - checkout
-      - setup_remote_docker:
-          version: 20.10.14
       - run:
           name: tool install
           command: |
@@ -30,6 +28,8 @@ jobs:
             cd src
             echo $LARAVEL_ENV | base64 --decode > .env
             /usr/local/bin/composer install -n --prefer-dist
+      - setup_remote_docker:
+          version: 20.10.14
       - run:
           name: build image
           command: |
