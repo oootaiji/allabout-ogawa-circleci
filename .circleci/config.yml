@@ -37,7 +37,7 @@ jobs:
             gcloud auth configure-docker us-east1-docker.pkg.dev
             gcloud components install kubectl
             gcloud config set project o-taiji
-            gcloud config set compute/zone us-west1-a
+            gcloud config set compute/region us-west1
             gcloud container clusters get-credentials allabout-ogawa-kubernetes
       - run:
           name: build image
