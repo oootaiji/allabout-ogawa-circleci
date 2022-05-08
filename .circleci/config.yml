@@ -13,8 +13,8 @@ jobs:
     steps:
       - checkout
       - run:
-          name: composer install
-          command: composer install -n --prefer-dist
+        name: composer install
+        command: composer install -n --prefer-dist
       - run:
         name: GCP Auth
         command: |
