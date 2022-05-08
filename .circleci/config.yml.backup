@@ -8,12 +8,10 @@ executors:
 jobs:
   deploy_job:
     parallelism: 1
+    executor: deploy_executor
     working_directory: /var/www/html
     steps:
       - checkout
-      - run:
-          name: test
-          command: ls -al
       - run:
           name: composer install
           command: /usr/local/bin/composer install -n --prefer-dist
