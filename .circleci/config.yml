@@ -8,13 +8,10 @@ executors:
 jobs:
   deploy_job:
     parallelism: 1
-    executor: deploy_executor
+    machine: true
     working_directory: /var/www/html
     steps:
       - checkout
-      - setup_remote_docker:
-          version: 20.10.14
-          docker_layer_caching: true
       - run:
           name: tool install
           command: |
@@ -33,8 +30,7 @@ jobs:
       - run:
           name: build image
           command: |
-            curl -fsSL https://get.docker.com/gpg | apt-key add -
-            docker build -t us-east1-docker.pkg.dev/o-taiji/allabout-ogawa-kubernetes/app:${CIRCLE_SHA1} .
+            docker build -t us-east1-docker.pkg.dev/o-taiji/allabout-ogawa-kubernetes/app:${CIRCLE_SHA1} . -f docker/Dockerfile
       - run:
           name: push image
           command: |
