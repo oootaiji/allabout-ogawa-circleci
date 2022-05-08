@@ -1,26 +1,52 @@
-# Use the latest 2.1 version of CircleCI pipeline process engine.
-# See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
 
-# Define a job to be invoked later in a workflow.
-# See: https://circleci.com/docs/2.0/configuration-reference/#jobs
-jobs:
-  say-hello:
-    # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
-    # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
+executors:
+  deploy_executor:
     docker:
-      - image: cimg/base:stable
-    # Add steps to the job
-    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
+      - image: php:8.0-apache-buster
+
+jobs:
+  deploy_job:
+    parallelism: 1
+    executor: deploy_executor
+    working_directory: /var/www/html
     steps:
       - checkout
       - run:
-          name: "Say hello"
-          command: "echo Hello, World!"
+          name: composer install
+          command: composer install -n --prefer-dist
+      - run:
+        name: GCP Auth
+        command: |
+          echo $GKE_SERVICE_KEY > gcloud-service-key.json
+          gcloud auth activate-service-account --key-file gcloud-service-key.json
+          gcloud auth configure-docker us-east1-docker.pkg.dev
+      - run:
+        name: gcloud install
+        command: |
+          curl -s https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-370.0.0-darwin-x86_64.tar.gz?hl=ja | tar xz
+          source ./google-cloud-sdk/path.bash.inc
+          gcloud components install kubectl
+          gcloud config set project o-taiji
+          gcloud config set compute/zone us-west1-a
+          gcloud container clusters get-credentials allabout-ogawa-kubernetes
+      - run:
+        name: build image
+        command: |
+          docker build -t us-east1-docker.pkg.dev/o-taiji/allabout-ogawa-kubernetes/app:${CIRCLE_SHA1} .
+      - run:
+        name: push image
+        command: |
+          docker push us-east1-docker.pkg.dev/o-taiji/allabout-ogawa-kubernetes/app:${CIRCLE_SHA1}
+      - run:
+        name: deploy
+        command: |
+          kubectl set image deployment/app app=us-east1-docker.pkg.dev/o-taiji/allabout-ogawa-kubernetes/app:${CIRCLE_SHA1}
 
-# Invoke jobs via workflows
-# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  say-hello-workflow:
+  deploy_workflow:
     jobs:
-      - say-hello
+      - deploy_job:
+        filters:
+          branches:
+            only: main
