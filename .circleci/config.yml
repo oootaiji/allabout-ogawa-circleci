@@ -9,7 +9,7 @@ jobs:
   deploy_job:
     parallelism: 1
     executor: deploy_executor
-    working_directory: /var/www/html
+    working_directory: /var/www
     steps:
       - checkout
       - run:
@@ -30,7 +30,7 @@ jobs:
       - run:
           name: build image
           command: |
-            cd /var/www/html
+            cd /var/www
             docker build -t us-east1-docker.pkg.dev/o-taiji/allabout-ogawa-kubernetes/app:${CIRCLE_SHA1} .
       - run:
           name: push image

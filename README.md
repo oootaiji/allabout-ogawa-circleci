@@ -107,6 +107,12 @@ circleciとkubernetes(GKE)は実際に業務でつ分かれているため、理
     gcloud artifacts repositories create $repo_name
     ```
 
+### デプロイ
+
+- 
+
+
+
 
 ## 参考文献
 - [CircleCI を使ってGKEへ自動デプロイ](https://qiita.com/wqwq/items/46a13019209aeafd2cec)
