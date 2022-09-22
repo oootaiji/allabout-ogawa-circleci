@@ -2,8 +2,8 @@
 ## 概要
 circleciを利用してGKEへデプロイする方法を学習するためのアプリ
 circleciとkubernetes(GKE)は実際に業務でつ分かれているため、理解を深めることを目的とする
-目的はcircleciの理解のため、アプリはHello world出力するだけにとどめる。
-ただし、そのままアプリとして利用できるコンテナではなく、実際にアプリをコードからビルドする
+そして、Github Actionsへの移行のための知識へつなげる
+目的はcircleciの理解のため、アプリはHello world出力するだけにとどめる
 
 ## 条件
 ### インフラ
@@ -11,7 +11,6 @@ circleciとkubernetes(GKE)は実際に業務でつ分かれているため、理
 - Github
 - CircleCI
     - orb使わない
-    - orb使う
 - セキュリティはある程度
     - SSLあり
     - VPCなし
@@ -21,7 +20,7 @@ circleciとkubernetes(GKE)は実際に業務でつ分かれているため、理
 
 ### アプリ
 - コンテナ
-    - 
+    - php:8.0-apache-buster
 - フレームワーク
     - 最新Laravel (php8)
 - 機能
@@ -46,7 +45,7 @@ circleciとkubernetes(GKE)は実際に業務でつ分かれているため、理
     2. Artifact Registry and Google Kubernetes Engine API を有効
     ```
 
-- ローカルで、gcloudログインしておく
+- ローカルでgcloudにログインしておく
 
     ```
     gcloud auth login
