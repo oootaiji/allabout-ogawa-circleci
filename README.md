@@ -3,7 +3,9 @@
 circleciを利用してGKEへデプロイする方法を学習するためのアプリ
 circleciとkubernetes(GKE)は実際に業務でつ分かれているため、理解を深めることを目的とする
 そして、Github Actionsへの移行のための知識へつなげる
-目的はcircleciの理解のため、アプリはHello world出力するだけにとどめる
+
+目的はcircleciの自動デプロイの理解のため、アプリはHello world出力するだけにとどめるが、
+以前と違って、なるべく実務に近い形のLaravelでHello worldを出力させる
 
 ## 条件
 ### インフラ
@@ -25,7 +27,6 @@ circleciとkubernetes(GKE)は実際に業務でつ分かれているため、理
     - 最新Laravel (php8)
 - 機能
     - hello worldだけ出力
-
 
 ## 準備
 ### ローカル開発環境
@@ -81,14 +82,20 @@ circleciとkubernetes(GKE)は実際に業務でつ分かれているため、理
 
     ```
     cluster_name=allabout-ogawa-kubernetes
-    gcloud container clusters create $cluster_name --machine-type=e2-micro --num-nodes=1 --region=us-west1 --zone=us-west1-a
+    gcloud container clusters create $cluster_name --machine-type=e2-micro --num-nodes=1 --region=us-west1
     ```
 
 - クラスタの認証情報を取得 (このコマンドで、以下で指定したクラスターにデプロイされるようになる)
 
     ```
     cluster_name=allabout-ogawa-kubernetes
-    gcloud container clusters get-credentials $cluster_name --repository-format=docker --location=us-east1
+    gcloud container clusters get-credentials $cluster_name
+    ```
+
+- クラスタ作成確認
+
+    ```
+    https://console.cloud.google.com/kubernetes/list/overview?project=o-taiji
     ```
 
 ### GCRの設定
@@ -102,13 +109,22 @@ circleciとkubernetes(GKE)は実際に業務でつ分かれているため、理
 
     ```
     repo_name=allabout-ogawa-kubernetes
-    gcloud artifacts repositories create $repo_name
+    gcloud artifacts repositories create $repo_name --repository-format=docker --location=us-east1
+    ```
+
+- gcr確認 レジストリ確認
+
+    ```
+    https://console.cloud.google.com/kubernetes/list/overview?project=o-taiji
     ```
 
 ### デプロイ
 
-- 
+- circelci確認
 
+    ```
+    https://app.circleci.com/pipelines/github/oootaiji
+    ```
 
 
 
