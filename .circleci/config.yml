@@ -1,14 +1,17 @@
 version: 2.1
 
 executors:
+  build_executor:
+    docker:
+      - image: ubuntu:22.04
   deploy_executor:
     docker:
       - image: php:8.0-apache-buster
 
 jobs:
-  deploy_job:
+  build_job:
     parallelism: 1
-    executor: deploy_executor
+    executor: build_executor
     steps:
       - checkout
       - run:
@@ -47,6 +50,10 @@ jobs:
             gcloud config set project o-taiji
             gcloud config set compute/region us-west1
             gcloud container clusters get-credentials allabout-ogawa-kubernetes
+  deploy_job:
+    parallelism: 1
+    executor: deploy_executor
+    steps:
       - run:
           name: deploy
           command: |
@@ -55,6 +62,7 @@ jobs:
 workflows:
   deploy_workflow:
     jobs:
+      - build_job:
       - deploy_job:
         filters:
           branches:
