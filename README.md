@@ -75,7 +75,6 @@ circleciとkubernetes(GKE)は実際に業務でつ分かれているため、理
 ### 権限の設定
 
 - IAMでサービスアカウントを作成
-- 
 
 ### クラスターの設定
 - kubernetesクラスタ作成
