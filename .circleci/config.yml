@@ -9,6 +9,7 @@ jobs:
   deploy_job:
     parallelism: 1
     executor: deploy_executor
+    working_directory: /var/www
     steps:
       - checkout
       - run:
