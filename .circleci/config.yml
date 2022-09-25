@@ -1,28 +1,68 @@
 version: 2.1
 
 executors:
-  build_executor:
+  cloudsdk_executor:
     docker:
-      - image: ubuntu:22.04
-  deploy_executor:
+      - image: google/cloud-sdk
+    working_directory: ~/workspace
+  php_executor:
     docker:
       - image: php:8.0-apache-buster
+    working_directory: ~/workspace
 
 jobs:
-  build_job:
+  setup_job:
     parallelism: 1
-    executor: build_executor
+    executor: php_executor
     steps:
       - checkout
       - run:
           name: tool install
           command: |
-            apt update && apt install -y software-properties-common zip unzip
-            php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-            php -r "if (hash_file('sha384', 'composer-setup.php') === '55ce33d7678c5a611085589f1f3ddf8b3c52d662cd01d4ba75c0ee0459970c2200a51f492d557530c71c15d8dba01eae') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
-            php composer-setup.php
-            php -r "unlink('composer-setup.php');"
-            mv composer.phar /usr/local/bin/composer
+            sudo apt update
+            sudo apt install -y software-properties-common zip unzip
+            sudo apt install default-mysql-client
+            sudo docker-php-ext-install php_mysql
+            sudo docker-php-ext-enable php_mysql
+# php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+# php -r "if (hash_file('sha384', 'composer-setup.php') === '55ce33d7678c5a611085589f1f3ddf8b3c52d662cd01d4ba75c0ee0459970c2200a51f492d557530c71c15d8dba01eae') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+# php composer-setup.php
+# php -r "unlink('composer-setup.php');"
+# mv composer.phar /usr/local/bin/composer
+      - restore_cache:
+          name: restore composer cache
+          keys:
+            - composer-cache-v1-{{ .Branch }}-{{ checksum "composer.json" }}
+      - run:
+          name: composer install
+          command: |
+            composer --version
+            composer config discard-changes true
+            composer install -n --prefer-dist
+      - save_cache:
+          name: save composer cache
+          paths:
+            - vendor
+          key: composer-cache-v1-{{ .Branch }}-{{ checksum "composer.json" }}
+
+      - persist_to_workspace:
+          root: ~/workspace
+          paths:
+            - ./*
+
+  build_job:
+    parallelism: 1
+    executor: cloudsdk_executor
+    steps:
+      - attach_workspace:
+          at: ~/workspace
+      - setup_remote_docker:
+          docker_layer_caching: false
+      - run:
+          name: laravel directory permission change
+          command: |
+            chmod 777 -R storage
+            chmod 777 -R bootstrap/cache
       - run:
           name: app install
           command: |
@@ -50,20 +90,33 @@ jobs:
             gcloud config set project o-taiji
             gcloud config set compute/region us-west1
             gcloud container clusters get-credentials allabout-ogawa-kubernetes
+      - persist_to_workspace:
+          root: ~/workspace
+          paths:
+            - ./*
+
   deploy_job:
     parallelism: 1
-    executor: deploy_executor
+    executor: cloudsdk_executor
     steps:
+      - attach_workspace:
+          at: ~/workspace
       - run:
           name: deploy
           command: |
             kubectl set image deployment/app app=us-east1-docker.pkg.dev/o-taiji/allabout-ogawa-kubernetes/app:${CIRCLE_SHA1}
 
+
 workflows:
   deploy_workflow:
     jobs:
+      - setup_job
       - build_job:
+          requires:
+            - setup_job
       - deploy_job:
-        filters:
-          branches:
-            only: main
+          requires:
+            - build_job
+          filters:
+            branches:
+              only: main

@@ -8,6 +8,9 @@ circleciとkubernetes(GKE)は実際に業務でつ分かれているため、理
 以前と違って、なるべく実務に近い形のLaravelでHello worldを出力させる
 
 ## 条件
+
+dockerでローカル開発環境をつくり、それをcircleciでデプロイする
+
 ### インフラ
 - GKE
 - Github
@@ -23,6 +26,9 @@ circleciとkubernetes(GKE)は実際に業務でつ分かれているため、理
 ### アプリ
 - コンテナ
     - php:8.0-apache-buster
+        - + nodejs
+        - + composer
+    - redis
 - フレームワーク
     - 最新Laravel (php8)
 - 機能
