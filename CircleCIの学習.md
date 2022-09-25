@@ -23,11 +23,14 @@ Continuous Deliveryの略
 ### CI/CDとは
 CIとCDをまとめてやってくれる。アプリをビルドして問題ないかを検証して、本番環境へデプロイするまでのやってくれる
 
-### CircleCIの特徴 (他のCICDとの違い)
+### CircleCIの特徴 (他のCICDとの違いも含めて)
 - Saasであること (マネージド・サービス)
+- CI/CDサービスである (CDのみのサービスも有る)
 - gitのみ対応 (サブバージョンなどは非対応)
 - yamlで設定を書く (シンプル)
-
+- bashが利用されている
+    - **は、*に展開される。展開されないようにするには、shopt -s globstarを設定
+    - set -x は、デバッグ出力開始。詳細なログが流れる
 
 ## CircleCIの主な仕様
 ### 設定ファイルの用語
@@ -75,15 +78,40 @@ CIとCDをまとめてやってくれる。アプリをビルドして問題な�
 - 並列実行と当時実行の違い
     - 並列実行とは、ジョブを並列実行させる数のこと
     - 同時実行とは、circleciのビルドの同時実行数制限のこと。プランによって同時実行数が制限されている。メンバー間も実行数は共有される。並列実行とは違う
-### その他
-- ciecleciではbashが利用されている
-    - **は、*に展開される。展開されないようにするには、shopt -s globstarを設定
-    - set -x は、デバッグ出力開始。詳細なログが流れる
 
 ## Github Actionsについて
 
 - GithubのCDツール
 - Microsoftのご加護
+
+
+## その他
+
+### apache
+
+apacheで不足していた知識
+
+- conf-availableとconf-enabledの違い
+    - https://qiita.com/naotwu/items/db8d07c5d747c530eb66
+    - 〇〇-enabled から〇〇-available へのシンボリックリンクがある
+        - a2ensite でsites-enabledからのシンボリックリンクを作成させる
+        - a2enmod でmods-enabledからのシンボリックリンクが作成される
+        - a3enconf でconf-enabledからのシンボリックリンクが作成される
+
+### docker
+
+dockerで不足していた知識
+
+- docker-composeからdockerfileへ変数を渡す
+    - https://qiita.com/Targityen/items/2717511ca9f12c1c667f
+- EXPOSE 80
+    - コンテナのポートを公開
+- pecl install と docker-php-ext-install 違い
+    - docker-php-ext-install はphp標準の拡張モジュールをインストール
+    - pecl install は標準にない拡張モジュールインストール
+    - docker-php-ext-enable によってpeclでインストールしたモジュールを有効化する
+- apt install と apt-get install の違い
+    - apt の方が基本だが、CLIとしては、apt-get が推奨されている
 
 
 ## 参考文献
