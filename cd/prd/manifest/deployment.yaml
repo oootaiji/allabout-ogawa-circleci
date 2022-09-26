@@ -6,7 +6,7 @@ metadata:
   labels:
     run: app
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
       app: app
@@ -33,6 +33,6 @@ spec:
               value: Asia/Tokyo
   strategy:
     rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 2
+      maxSurge: 3
+      maxUnavailable: 3
     type: RollingUpdate
