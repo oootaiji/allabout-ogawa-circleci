@@ -42,3 +42,5 @@ RUN set -x \
 
 # declare container publish port
 EXPOSE 80
+
+RUN echo '<?php echo "ok"; ?>' > /var/www/html/index.php
