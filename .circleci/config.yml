@@ -53,7 +53,9 @@ jobs:
             npm install -g n
             n stable
             apt-get purge -y npm nodejs
-            source ~/.bashrc
+            export N_PREFIX=$HOME/.n
+            export PATH=$N_PREFIX/bin:$PATH
+            npm -v
             cd src
             npm install
             npm run prod
