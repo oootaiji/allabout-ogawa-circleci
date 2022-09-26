@@ -13,9 +13,12 @@ executors:
 jobs:
   setup_job:
     executor: php_executor
-    working_directory: ~/workspace
     steps:
       - checkout
+      - run:
+          name: test
+          command: |
+            pwd
       - run:
           name: apt install
           command: |
