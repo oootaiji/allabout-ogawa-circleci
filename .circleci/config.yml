@@ -51,8 +51,8 @@ jobs:
           command: |
             apt-get install -y npm
             npm install -g n
+            apt purge -y npm
             n stable
-            apt purge -y nodejs
             cd src
             npm install
             npm run prod
