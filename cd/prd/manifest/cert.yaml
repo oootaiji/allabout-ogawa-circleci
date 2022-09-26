@@ -5,4 +5,4 @@ metadata:
   namespace: ${CIRCLE_PROJECT_REPONAME}
 spec:
   domains:
-    - ${APP_DOMAIN}
+    - ${CERT_DOMAIN}

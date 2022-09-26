@@ -141,6 +141,8 @@ jobs:
       - run:
           name: exec deploy
           command: |
+            DEPLOYMENT_CONTAINER_IMAGE=us-east1-docker.pkg.dev/o-taiji/${CIRCLE_PROJECT_REPONAME}/app:${CIRCLE_SHA1}
+            CERT_DOMAIN=circleci.ogawa.allabout.oootaiji.com
             cd cd/${PRO_APP_ENV}/manifest
             envsubst < namespace.yaml > $HOME/namespace.yaml
             envsubst < service.yaml > $HOME/service.yaml
