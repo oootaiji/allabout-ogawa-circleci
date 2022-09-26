@@ -13,13 +13,14 @@ executors:
 jobs:
   setup_job:
     executor: php_executor
+    working_directory: ~/workspace
     steps:
       - checkout
       - run:
           name: apt install
           command: |
-            apt-get update \
-            apt-get install -y gettext
+            sudo apt-get update \
+            sudo apt-get install -y gettext
       - restore_cache:
           name: restore composer cache
           keys:
@@ -135,6 +136,6 @@ workflows:
       - deploy_job:
           requires:
             - build_job
-          filters:
-            branches:
-              only: main
+          # filters:
+          #   branches:
+          #     only: main
