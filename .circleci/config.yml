@@ -97,7 +97,7 @@ jobs:
             cd src
             echo ${GKE_SERVICE_ACCOUNT_KEY} > $HOME/allabout-kubernetes-service-account.json
             gcloud auth activate-service-account --key-file $HOME/allabout-kubernetes-service-account.json
-            gcloud auth configure-docker --quiet us-east1-docker.pkg.dev
+            gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://us-east1-docker.pkg.dev
       - run:
           name: build artifact and save artifact
           command: |
