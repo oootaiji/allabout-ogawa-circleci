@@ -19,7 +19,7 @@ jobs:
           name: apt install
           command: |
             apt-get update
-            apt-get install -y gettext
+            apt-get install -y git gettext
       - restore_cache:
           name: restore composer cache
           keys:
