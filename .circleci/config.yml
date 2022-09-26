@@ -120,6 +120,13 @@ jobs:
       - attach_workspace:
           at: ~/workspace
       - run:
+          name: gcloud auth
+          command: |
+            cd src
+            echo ${GKE_SERVICE_ACCOUNT_KEY} > $HOME/allabout-kubernetes-service-account.json
+            gcloud auth activate-service-account --key-file $HOME/allabout-kubernetes-service-account.json
+            gcloud auth configure-docker us-east1-docker.pkg.dev
+      - run:
           name: gcloud config
           command: |
             gcloud config set project o-taiji
