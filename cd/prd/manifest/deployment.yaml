@@ -14,8 +14,12 @@ spec:
         app: app
     spec:
       containers:
-        - image: gcr.io/google-samples/hello-app:1.0
+        - image: ${DEPLOYMENT_CONTAINER_IMAGE}
           name: app
           ports:
             - name: http
               containerPort: 80
+          env:
+            - name: TZ
+              value: Asia/Tokyo
+
