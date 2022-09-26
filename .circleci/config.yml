@@ -101,8 +101,7 @@ jobs:
       - run:
           name: build artifact and save artifact
           command: |
-            cd src
-            docker build \
+            docker build --file=src/cd/${APP_ENV}/php/Dockerfile \
               --build-arg APP_ENV=prd \
               --build-arg APP_PATH=/var/www/${CIRCLE_PROJECT_REPONAME} \
               -t us-east1-docker.pkg.dev/o-taiji/${CIRCLE_PROJECT_REPONAME}/app:${CIRCLE_SHA1} .
