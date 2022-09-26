@@ -114,5 +114,50 @@ dockerで不足していた知識
     - apt の方が基本だが、CLIとしては、apt-get が推奨されている
 
 
+### kubernetes
+
+kubernetesで不足していた知識
+
+- RollingUpdate
+    - Blue/Green Deploymentとは少し違う
+    - ダウンタイム無しでリリース
+    - k8sにBlue/Greenは用意されていないので、基本的にこれを使う
+    - maxSurge が宣言したポッド数を超えて作れるpod数
+    - maxUnavailable が停止状態になれる最大のpod数
+- デプロイ方式の種類
+    - Recreate
+        - ダウンタイムあり
+        - 高速でシンプルな切り替えデプロイ
+    - RollingUpdate
+        - ダウンタイムなし
+        - すぐに切り替わる
+    - Blue/Green Deployment
+        - ダウンタイムなし
+        - 動作確認後に切り替える時間がある
+    - Canary Release
+        - 先行公開してリリース
+- revisionHistoryLimit
+    - ロールバック可能なReplicaSetの最大保有数。超えるとガベージ対象
+- Kubernetesの設定の特徴
+    - リソース要求とリソース制限の２軸で設定できる 
+- Pod
+    - 最小のデプロイ単位
+    - 最終的なエンドポイント
+- ReplicaSet
+    - クラスタ全体のPodマネージャー
+    - ReplicaSetで管理されたPodは、ノード障害時に自動で別のノードに割り当てられる
+    - ReplicaSetのPod管理の仕組みは調整ループ
+        - 望ましい状態: 
+        - 現在の状態: 
+    - RepolicaSetとPodは疎結合になっている
+    - スケールすることもできる
+- Deployment
+    - ReplicaSetを管理するのがDeployment
+- ロールアウトとは
+    - デプロイと同義
+
 ## 参考文献
+- [Dockerドキュメント](https://docs.docker.jp/index.html)
+- [CircleCIドキュメント](https://circleci.com/docs/ja)
 - [いまさらだけどCircleCIに入門したので分かりやすくまとめてみた](https://qiita.com/gold-kou/items/4c7e62434af455e977c2)
+- [PodとReplicaSetとDeploymentの関連]https://blog.a-know.me/entry/2018/08/14/185324
