@@ -31,7 +31,7 @@ RUN set -x \
 COPY . ${APP_PATH}
 
 # create app config cache
-RUN cd ${APP_PATH} \
+RUN cd ${APP_PATH}/src \
   && php artisan config:cache
 
 # copy config
