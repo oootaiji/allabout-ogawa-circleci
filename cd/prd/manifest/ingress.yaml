@@ -2,13 +2,13 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: ingress
-  namespace: allabout-ogawa-kubernetes
+  namespace: ${CIRCLE_PROJECT_REPONAME}
   annotations:
-    kubernetes.io/ingress.global-static-ip-name: "allabout-ogawa-kubernetes-ip"
+    kubernetes.io/ingress.global-static-ip-name: ${CIRCLE_PROJECT_REPONAME}-ip
     networking.gke.io/managed-certificates: cert
 spec:
   defaultBackend:
     service:
       name: service
       port:
-        number: 8080
+        number: 80

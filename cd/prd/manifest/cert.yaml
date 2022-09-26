@@ -2,7 +2,7 @@ apiVersion: networking.gke.io/v1
 kind: ManagedCertificate
 metadata:
   name: cert
-  namespace: allabout-ogawa-kubernetes
+  namespace: ${CIRCLE_PROJECT_REPONAME}
 spec:
   domains:
-    - kubernetes.ogawa.allabout.oootaiji.com
+    - ${APP_DOMAIN}

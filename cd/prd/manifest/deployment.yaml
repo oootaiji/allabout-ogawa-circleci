@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app
+  namespace: ${CIRCLE_PROJECT_REPONAME}
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: app
+  template:
+    metadata:
+      labels:
+        app: app
+    spec:
+      containers:
+        - image: us-east1-docker.pkg.dev/o-taiji/${CIRCLE_PROJECT_REPONAME}/app:${CIRCLE_SHA1}
+          name: app
+          ports:
+            - name: http
+              containerPort: 80
+          resources:
+            requests:
+              cpu: 100m
+              memory: 1Gi
+            limits:
+              memory: 1Gi
+          imagePullPolicy: Always
+          env:
+            - name: TZ
+              value: Asia/Tokyo
+

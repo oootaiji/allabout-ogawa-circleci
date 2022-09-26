@@ -12,23 +12,14 @@ executors:
 
 jobs:
   setup_job:
-    parallelism: 1
     executor: php_executor
     steps:
       - checkout
       - run:
-          name: tool install
+          name: apt install
           command: |
-            sudo apt update
-            sudo apt install -y software-properties-common zip unzip
-            sudo apt install default-mysql-client
-            sudo docker-php-ext-install php_mysql
-            sudo docker-php-ext-enable php_mysql
-# php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-# php -r "if (hash_file('sha384', 'composer-setup.php') === '55ce33d7678c5a611085589f1f3ddf8b3c52d662cd01d4ba75c0ee0459970c2200a51f492d557530c71c15d8dba01eae') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
-# php composer-setup.php
-# php -r "unlink('composer-setup.php');"
-# mv composer.phar /usr/local/bin/composer
+            sudo apt-get update \
+            sudo apt-get install -y gettext
       - restore_cache:
           name: restore composer cache
           keys:
@@ -36,77 +27,104 @@ jobs:
       - run:
           name: composer install
           command: |
+            cd src
             composer --version
             composer config discard-changes true
-            composer install -n --prefer-dist
+            composer install -n --prefer-dist --no-dev
       - save_cache:
           name: save composer cache
           paths:
             - vendor
           key: composer-cache-v1-{{ .Branch }}-{{ checksum "composer.json" }}
-
+      - restore_cache:
+          name: restore npm cache
+          keys:
+            - npm-cache-v1-{{ .Branch }}-{{ checksum "package.json" }}
+      - run:
+          name: npm install
+          command: |
+            cd src
+            npm install
+            npm run prod
+      - save_cache:
+          name: save npm cache
+          paths:
+            - node_modules
+          key: npm-cache-v1-{{ .Branch }}-{{ checksum "package.json" }}
       - persist_to_workspace:
           root: ~/workspace
           paths:
             - ./*
 
   build_job:
-    parallelism: 1
     executor: cloudsdk_executor
     steps:
       - attach_workspace:
           at: ~/workspace
-      - setup_remote_docker:
-          docker_layer_caching: false
+      - setup_remote_docker
       - run:
-          name: laravel directory permission change
+          name: change laravel directory permission
           command: |
             chmod 777 -R storage
             chmod 777 -R bootstrap/cache
       - run:
-          name: app install
+          name: set env
           command: |
             cd src
-            echo $LARAVEL_ENV | base64 --decode > .env
-            /usr/local/bin/composer install -n --prefer-dist
+            envsubst < .env.prd > .env
       - run:
-          name: build image
+          name: gcloud auth
           command: |
-            cd /var/www
-            docker build -t us-east1-docker.pkg.dev/o-taiji/allabout-ogawa-kubernetes/app:${CIRCLE_SHA1} .
-      - run:
-          name: push image
-          command: |
-            docker push us-east1-docker.pkg.dev/o-taiji/allabout-ogawa-kubernetes/app:${CIRCLE_SHA1}
-      - run:
-          name: gcloud install
-          command: |
-            curl -s https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-370.0.0-darwin-x86_64.tar.gz?hl=ja | tar xz
-            source ./google-cloud-sdk/path.bash.inc
-            echo $GKE_SERVICE_KEY > gcloud-service-key.json
-            gcloud auth activate-service-account --key-file gcloud-service-key.json
+            cd src
+            echo ${GKE_SERVICE_ACCOUNT_KEY} > ${HOME}/allabout-kubernetes-service-account.json
+            gcloud auth activate-service-account --key-file ${HOME}/allabout-kubernetes-service-account.json
             gcloud auth configure-docker us-east1-docker.pkg.dev
-            gcloud components install kubectl
+      - run:
+          name: gcloud config
+          command: |
             gcloud config set project o-taiji
             gcloud config set compute/region us-west1
-            gcloud container clusters get-credentials allabout-ogawa-kubernetes
+            gcloud container clusters get-credentials ${CIRCLE_PROJECT_REPONAME}
+      - run:
+          name: build artifact and save artifact
+          command: |
+            cd src
+            docker build \
+              --build-arg APP_ENV=prd \
+              --build-arg APP_PATH=/var/www/${CIRCLE_PROJECT_REPONAME} \
+              -t us-east1-docker.pkg.dev/o-taiji/${CIRCLE_PROJECT_REPONAME}/app:${CIRCLE_SHA1} .
+            docker tag ${CIRCLE_PROJECT_REPONAME} us-east1-docker.pkg.dev/o-taiji/${CIRCLE_PROJECT_REPONAME}/app:${CIRCLE_SHA1}
+            docker push us-east1-docker.pkg.dev/o-taiji/${CIRCLE_PROJECT_REPONAME}/app:${CIRCLE_SHA1}
+            docker tag ${CIRCLE_PROJECT_REPONAME} us-east1-docker.pkg.dev/o-taiji/${CIRCLE_PROJECT_REPONAME}/app:latest
+            docker push us-east1-docker.pkg.dev/o-taiji/${CIRCLE_PROJECT_REPONAME}/app:latest
       - persist_to_workspace:
           root: ~/workspace
           paths:
             - ./*
 
   deploy_job:
-    parallelism: 1
     executor: cloudsdk_executor
     steps:
       - attach_workspace:
           at: ~/workspace
       - run:
-          name: deploy
+          name: exec deploy
           command: |
-            kubectl set image deployment/app app=us-east1-docker.pkg.dev/o-taiji/allabout-ogawa-kubernetes/app:${CIRCLE_SHA1}
-
-
+            cd src/cd/${APP_ENV}/manifest
+            envsubst < namespace.yaml > ${HOME}/namespace.yaml
+            envsubst < service.yaml > ${HOME}/service.yaml
+            envsubst < deployment.yaml > ${HOME}/deployment.yaml
+            envsubst < ingress.yaml > ${HOME}/ingress.yaml
+            envsubst < cert.yaml > ${HOME}/cert.yaml
+            kubectl apply -f ${HOME}/namespace.yaml
+            kubectl apply -f ${HOME}/service.yaml
+            kubectl apply -f ${HOME}/deployment.yaml
+            kubectl apply -f ${HOME}/ingress.yaml
+            kubectl apply -f ${HOME}/cert.yaml
+      - run:
+          name: confirm deploy
+          command: |
+            kubectl rollout status deployment app
 workflows:
   deploy_workflow:
     jobs:
