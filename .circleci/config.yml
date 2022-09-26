@@ -147,10 +147,11 @@ jobs:
 workflows:
   deploy_workflow:
     jobs:
+      - build_job
       # - setup_job
-      - build_job:
-          # requires:
-          #   - setup_job
+      # - build_job:
+      #     requires:
+      #       - setup_job
       - deploy_job:
           requires:
             - build_job
