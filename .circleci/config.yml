@@ -16,10 +16,10 @@ jobs:
     steps:
       - checkout
       - run:
-          name: apt install
+          name: setup php_executor
           command: |
             apt-get update
-            apt-get install -y git gettext
+            apt-get install -y git
       - restore_cache:
           name: restore composer cache
           keys:
@@ -76,6 +76,11 @@ jobs:
           at: ~/workspace
       - setup_remote_docker
       - run:
+          name: setup cloudsdk_executor
+          command: |
+            apt-get update
+            apt-get install -y git gettext
+      - run:
           name: change laravel directory permission
           command: |
             cd src
@@ -93,12 +98,6 @@ jobs:
             echo ${GKE_SERVICE_ACCOUNT_KEY} > ${HOME}/allabout-kubernetes-service-account.json
             gcloud auth activate-service-account --key-file ${HOME}/allabout-kubernetes-service-account.json
             gcloud auth configure-docker us-east1-docker.pkg.dev
-      - run:
-          name: gcloud config
-          command: |
-            gcloud config set project o-taiji
-            gcloud config set compute/region us-west1
-            gcloud container clusters get-credentials ${CIRCLE_PROJECT_REPONAME}
       - run:
           name: build artifact and save artifact
           command: |
@@ -122,6 +121,12 @@ jobs:
       - attach_workspace:
           at: ~/workspace
       - run:
+          name: gcloud config
+          command: |
+            gcloud config set project o-taiji
+            gcloud config set compute/region us-west1
+            gcloud container clusters get-credentials ${CIRCLE_PROJECT_REPONAME}
+      - run:
           name: exec deploy
           command: |
             cd src/cd/${APP_ENV}/manifest
@@ -142,7 +147,7 @@ jobs:
 workflows:
   deploy_workflow:
     jobs:
-      - setup_job
+      # - setup_job
       - build_job:
           requires:
             - setup_job
