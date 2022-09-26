@@ -4,7 +4,7 @@ metadata:
   name: app
   namespace: ${CIRCLE_PROJECT_REPONAME}
 spec:
-  replicas: 1
+  replicas: 2
   strategy:
     rollingUpdate:
       maxSurge: 1
