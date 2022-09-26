@@ -49,8 +49,9 @@ jobs:
       - run:
           name: npm install
           command: |
-            apt-get install -y nodejs
+            apt-get install -y nodejs npm
             nodejs -v
+            npm -v
             cd src
             npm install
             npm run prod
