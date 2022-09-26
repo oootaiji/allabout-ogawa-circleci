@@ -25,22 +25,22 @@ jobs:
           command: |
             apt-get update
             apt-get install -y gettext
-      - restore_cache:
-          name: restore composer cache
-          keys:
-            - composer-cache-v1-{{ .Branch }}-{{ checksum "src/composer.json" }}
-      - run:
-          name: composer install
-          command: |
-            cd src
-            composer --version
-            composer config discard-changes true
-            composer install -n --prefer-dist --no-dev
-      - save_cache:
-          name: save composer cache
-          paths:
-            - vendor
-          key: composer-cache-v1-{{ .Branch }}-{{ checksum "src/composer.json" }}
+      # - restore_cache:
+      #     name: restore composer cache
+      #     keys:
+      #       - composer-cache-v1-{{ .Branch }}-{{ checksum "src/composer.json" }}
+      # - run:
+      #     name: composer install
+      #     command: |
+      #       cd src
+      #       composer --version
+      #       composer config discard-changes true
+      #       composer install -n --prefer-dist --no-dev
+      # - save_cache:
+      #     name: save composer cache
+      #     paths:
+      #       - vendor
+      #     key: composer-cache-v1-{{ .Branch }}-{{ checksum "src/composer.json" }}
       - restore_cache:
           name: restore npm cache
           keys:
