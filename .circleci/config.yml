@@ -119,6 +119,12 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/workspace
+      - setup_remote_docker
+      - run:
+          name: setup cloudsdk_executor
+          command: |
+            apt-get update
+            apt-get install -y git gettext
       - run:
           name: gcloud auth
           command: |
