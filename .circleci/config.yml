@@ -137,14 +137,17 @@ jobs:
           command: |
             gcloud config set project o-taiji
             gcloud config set compute/region us-west1
-            gcloud container clusters get-credentials ${CIRCLE_PROJECT_REPONAME}            
+            gcloud container clusters get-credentials ${CIRCLE_PROJECT_REPONAME}
+      - run:
+          name: add environment
+          command: |
+            echo "export DEPLOYMENT_CONTAINER_IMAGE=us-east1-docker.pkg.dev/o-taiji/${CIRCLE_PROJECT_REPONAME}/app:${CIRCLE_SHA1}" >> $BASH_ENV
+            echo "export CERT_DOMAIN=circleci.ogawa.allabout.oootaiji.com" >> $BASH_ENV
+            echo "export INGRESS_STATIC_IP=${CIRCLE_PROJECT_REPONAME}-ip" >> $BASH_ENV
+            echo "export NAMESPACE=${CIRCLE_PROJECT_REPONAME}" >> $BASH_ENV
+            source $BASH_ENV
       - run:
           name: exec deploy
-          environment:
-            DEPLOYMENT_CONTAINER_IMAGE: us-east1-docker.pkg.dev/o-taiji/${CIRCLE_PROJECT_REPONAME}/app:${CIRCLE_SHA1}
-            CERT_DOMAIN: circleci.ogawa.allabout.oootaiji.com
-            INGRESS_STATIC_IP: ${CIRCLE_PROJECT_REPONAME}-ip
-            NAMESPACE: ${CIRCLE_PROJECT_REPONAME}
           command: |
             cd cd/${PRO_APP_ENV}/manifest
             envsubst < namespace.yaml > $HOME/namespace.yaml
