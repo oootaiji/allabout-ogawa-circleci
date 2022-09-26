@@ -97,7 +97,7 @@ jobs:
             cd src
             echo ${GKE_SERVICE_ACCOUNT_KEY} > $HOME/allabout-kubernetes-service-account.json
             gcloud auth activate-service-account --key-file $HOME/allabout-kubernetes-service-account.json
-            gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://us-east1-docker.pkg.dev
+            gcloud auth configure-docker us-east1-docker.pkg.dev
       - run:
           name: build artifact and save artifact
           command: |
@@ -105,10 +105,10 @@ jobs:
               --build-arg APP_ENV=${PRO_APP_ENV} \
               --build-arg APP_PATH=/var/www/${CIRCLE_PROJECT_REPONAME} \
               -t ${CIRCLE_PROJECT_REPONAME} .
-            docker tag ${CIRCLE_PROJECT_REPONAME} us-east1-docker.pkg.dev/o-taiji/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_SHA1}
-            docker push us-east1-docker.pkg.dev/o-taiji/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_SHA1}
-            docker tag ${CIRCLE_PROJECT_REPONAME} us-east1-docker.pkg.dev/o-taiji/${CIRCLE_PROJECT_REPONAME}:latest
-            docker push us-east1-docker.pkg.dev/o-taiji/${CIRCLE_PROJECT_REPONAME}:latest
+            docker tag ${CIRCLE_PROJECT_REPONAME} us-east1-docker.pkg.dev/o-taiji/${CIRCLE_PROJECT_REPONAME}/app:${CIRCLE_SHA1}
+            docker push us-east1-docker.pkg.dev/o-taiji/${CIRCLE_PROJECT_REPONAME}/app:${CIRCLE_SHA1}
+            docker tag ${CIRCLE_PROJECT_REPONAME} us-east1-docker.pkg.dev/o-taiji/${CIRCLE_PROJECT_REPONAME}/app:latest
+            docker push us-east1-docker.pkg.dev/o-taiji/${CIRCLE_PROJECT_REPONAME}/app:latest
       - persist_to_workspace:
           root: ~/workspace
           paths:
