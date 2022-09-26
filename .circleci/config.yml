@@ -16,10 +16,6 @@ jobs:
     steps:
       - checkout
       - run:
-          name: test
-          command: |
-            pwd
-      - run:
           name: apt install
           command: |
             apt-get update
@@ -39,6 +35,7 @@ jobs:
             composer --version
             composer config discard-changes true
             cd src
+            pwd
             composer install -n --prefer-dist --no-dev
       - save_cache:
           name: save composer cache
