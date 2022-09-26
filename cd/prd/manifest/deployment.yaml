@@ -1,8 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app
   namespace: ${NAMESPACE}
+  name: app
+  labels:
+    run: app
 spec:
   replicas: 2
   selector:
@@ -25,7 +27,8 @@ spec:
           imagePullPolicy: Always
           command: ["apache2-foreground"]
           ports:
-            - containerPort: 80
+          - containerPort: 9376
+            protocol: TCP
           env:
             - name: TZ
               value: Asia/Tokyo

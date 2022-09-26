@@ -1,8 +1,8 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ingress
   namespace: ${NAMESPACE}
+  name: ingress
   annotations:
     kubernetes.io/ingress.global-static-ip-name: ${INGRESS_STATIC_IP}
     networking.gke.io/managed-certificates: cert
