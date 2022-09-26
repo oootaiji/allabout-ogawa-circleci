@@ -155,11 +155,11 @@ jobs:
             envsubst < deployment.yaml > $HOME/deployment.yaml
             envsubst < ingress.yaml > $HOME/ingress.yaml
             envsubst < cert.yaml > $HOME/cert.yaml
-            kubectl apply -f $HOME/namespace.yaml
-            kubectl apply -f $HOME/cert.yaml
-            kubectl apply -f $HOME/deployment.yaml
-            kubectl apply -f $HOME/service.yaml
-            kubectl apply -f $HOME/ingress.yaml
+            kubectl replace -f $HOME/namespace.yaml
+            kubectl replace -f $HOME/cert.yaml
+            kubectl replace -f $HOME/deployment.yaml
+            kubectl replace -f $HOME/service.yaml
+            kubectl replace -f $HOME/ingress.yaml
       - run:
           name: confirm deploy
           command: |
