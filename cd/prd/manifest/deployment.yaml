@@ -25,9 +25,8 @@ spec:
             limits:
               memory: 512Mi
           imagePullPolicy: Always
-          command: ["apache2-foreground"]
           ports:
-          - containerPort: 8080
+          - containerPort: 80
             protocol: TCP
           env:
             - name: TZ
