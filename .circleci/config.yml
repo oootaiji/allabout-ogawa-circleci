@@ -158,7 +158,7 @@ jobs:
       - run:
           name: confirm deploy
           command: |
-            kubectl rollout status deployment app
+            kubectl rollout status deployment app -n ${CIRCLE_PROJECT_REPONAME}
 workflows:
   deploy_workflow:
     jobs:
