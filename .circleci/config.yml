@@ -101,7 +101,7 @@ jobs:
       - run:
           name: build artifact and save artifact
           command: |
-            docker build --file=src/cd/${APP_ENV}/php/Dockerfile \
+            docker build --file=cd/${APP_ENV}/php/Dockerfile \
               --build-arg APP_ENV=prd \
               --build-arg APP_PATH=/var/www/${CIRCLE_PROJECT_REPONAME} \
               -t us-east1-docker.pkg.dev/o-taiji/${CIRCLE_PROJECT_REPONAME}/app:${CIRCLE_SHA1} .
@@ -128,7 +128,7 @@ jobs:
       - run:
           name: exec deploy
           command: |
-            cd src/cd/${APP_ENV}/manifest
+            cd cd/${APP_ENV}/manifest
             envsubst < namespace.yaml > ${HOME}/namespace.yaml
             envsubst < service.yaml > ${HOME}/service.yaml
             envsubst < deployment.yaml > ${HOME}/deployment.yaml
