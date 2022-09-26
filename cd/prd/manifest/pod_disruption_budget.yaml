@@ -1,0 +1,10 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  namespace: ${NAMESPACE}
+  name: pod_disruption_budget
+spec:
+  maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: app
