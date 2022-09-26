@@ -22,8 +22,8 @@ jobs:
       - run:
           name: apt install
           command: |
-            sudo apt update
-            sudo apt install -y gettext
+            apt-get update
+            apt-get install -y gettext
       - restore_cache:
           name: restore composer cache
           keys:
