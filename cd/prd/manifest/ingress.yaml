@@ -7,8 +7,13 @@ metadata:
     kubernetes.io/ingress.global-static-ip-name: ${INGRESS_STATIC_IP}
     networking.gke.io/managed-certificates: cert
 spec:
-  defaultBackend:
-    service:
-      name: service
-      port:
-        number: 80
+  rules:
+    - http:
+        paths:
+        - path: /*
+          pathType: Prefix
+          backend:
+            service:
+              name: service
+              port:
+                number: 80
