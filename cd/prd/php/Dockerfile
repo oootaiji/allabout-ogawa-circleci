@@ -42,6 +42,9 @@ COPY ./cd/${APP_ENV}/php/apache2/conf-available/ /etc/apache2/conf-available/
 COPY ./cd/${APP_ENV}/php/php.ini /usr/local/etc/php/php.ini
 ## --------------環境別--------------
 
+RUN set -x \
+    && sed -ri -e 's!/var/www/!${APP_PATH}/src/public!' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+
 # create apache config symboliclink
 RUN set -x \
   && a2enmod rewrite headers \
