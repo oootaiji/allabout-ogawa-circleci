@@ -49,7 +49,7 @@ jobs:
       - run:
           name: npm install
           command: |
-            apt-get install -y nodejs npm
+            apt-get install -y npm
             npm install -g n
             n stable
             cd src
