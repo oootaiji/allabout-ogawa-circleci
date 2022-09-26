@@ -4,7 +4,7 @@ metadata:
   namespace: ${NAMESPACE}
   name: pod_disruption_budget
 spec:
-  maxUnavailable: 1
+  maxUnavailable: 2
   selector:
     matchLabels:
       app: app
