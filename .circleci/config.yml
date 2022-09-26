@@ -53,6 +53,7 @@ jobs:
             npm install -g n
             n stable
             npm update npm -g
+            apt-get purge -y npm nodejs
             cd src
             npm install
             npm run prod
