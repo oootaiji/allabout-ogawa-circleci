@@ -2,7 +2,7 @@ apiVersion: networking.gke.io/v1
 kind: ManagedCertificate
 metadata:
   name: cert
-  namespace: ${CIRCLE_PROJECT_REPONAME}
+  namespace: ${NAMESPACE}
 spec:
   domains:
     - ${CERT_DOMAIN}

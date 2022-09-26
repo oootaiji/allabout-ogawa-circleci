@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: app
-  namespace: ${CIRCLE_PROJECT_REPONAME}
+  namespace: ${NAMESPACE}
 spec:
   replicas: 2
   strategy:
