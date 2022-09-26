@@ -40,7 +40,8 @@ RUN set -x \
   && a2enmod rewrite headers \
   && a2ensite app 000-default
 
+# healthcheck
+RUN echo '<?php echo "ok"; ?>' > /var/www/html/index.php
+
 # declare container publish port
 EXPOSE 80
-
-RUN echo '<?php echo "ok"; ?>' > /var/www/html/index.php

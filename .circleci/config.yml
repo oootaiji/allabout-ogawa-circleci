@@ -137,11 +137,7 @@ jobs:
           command: |
             gcloud config set project o-taiji
             gcloud config set compute/region us-west1
-            gcloud container clusters get-credentials ${CIRCLE_PROJECT_REPONAME}
-      - run:
-          name: create healthcheck file
-          command: |
-            echo '<?php echo "ok"; ?>' > /var/www/html/index.php
+            gcloud container clusters get-credentials ${CIRCLE_PROJECT_REPONAME}            
       - run:
           name: exec deploy
           environment:
