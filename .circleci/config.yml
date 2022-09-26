@@ -78,6 +78,7 @@ jobs:
       - run:
           name: change laravel directory permission
           command: |
+            cd src
             chmod 777 -R storage
             chmod 777 -R bootstrap/cache
       - run:
