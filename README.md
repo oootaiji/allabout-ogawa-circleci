@@ -1,4 +1,4 @@
-# allabout-ogawa-kubernetes-circleci
+# allabout-ogawa-circleci
 ## 概要
 circleciを利用してGKEへデプロイする方法を学習するためのアプリ
 circleciとkubernetes(GKE)は実際に業務でつ分かれているため、理解を深めることを目的とする
@@ -6,6 +6,11 @@ circleciとkubernetes(GKE)は実際に業務でつ分かれているため、理
 
 目的はcircleciの自動デプロイの理解のため、アプリはHello world出力するだけにとどめるが、
 以前と違って、なるべく実務に近い形のLaravelでHello worldを出力させる
+
+
+## github
+
+https://github.com/oootaiji/allabout-ogawa-circleci
 
 ## 条件
 
@@ -87,14 +92,14 @@ dockerでローカル開発環境をつくり、それをcircleciでデプロイ
 - kubernetesクラスタ作成
 
     ```
-    cluster_name=allabout-ogawa-kubernetes
+    cluster_name=allabout-ogawa-circleci
     gcloud container clusters create $cluster_name --machine-type=e2-micro --num-nodes=1 --region=us-west1
     ```
 
 - クラスタの認証情報を取得 (このコマンドで、以下で指定したクラスターにデプロイされるようになる)
 
     ```
-    cluster_name=allabout-ogawa-kubernetes
+    cluster_name=allabout-ogawa-circleci
     gcloud container clusters get-credentials $cluster_name
     ```
 
@@ -114,14 +119,36 @@ dockerでローカル開発環境をつくり、それをcircleciでデプロイ
 - gcr作成
 
     ```
-    repo_name=allabout-ogawa-kubernetes
+    repo_name=allabout-ogawa-circleci
     gcloud artifacts repositories create $repo_name --repository-format=docker --location=us-east1
     ```
 
 - gcr確認 レジストリ確認
 
     ```
-    https://console.cloud.google.com/kubernetes/list/overview?project=o-taiji
+    https://console.cloud.google.com/artifacts/browse/o-taiji?project=o-taiji
+    ```
+
+### DNSの設定
+
+- 固定IP作成
+
+    ```
+    solid_ip_name=allabout-ogawa-circleci-ip
+    gcloud compute addresses create $solid_ip_name --global
+    ```
+
+- 固定IP確認
+
+    ```
+    solid_ip_name=allabout-ogawa-circleci-ip
+    gcloud compute addresses describe $solid_ip_name --global
+    ```
+
+- DNSの設定
+
+    ```
+    circleci.ogawa.allabout.oootaiji.comへ上記のIPをAレコードで追加
     ```
 
 ### デプロイ
@@ -132,6 +159,7 @@ dockerでローカル開発環境をつくり、それをcircleciでデプロイ
     https://app.circleci.com/pipelines/github/oootaiji
     ```
 
+### 稼働確認
 
 
 ## 参考文献
