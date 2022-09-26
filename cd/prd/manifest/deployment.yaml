@@ -19,7 +19,7 @@ spec:
         app: app
     spec:
       containers:
-        - image: us-east1-docker.pkg.dev/o-taiji/${CIRCLE_PROJECT_REPONAME}/app:${CIRCLE_SHA1}
+        - image: us-east1-docker.pkg.dev/o-taiji/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_SHA1}
           name: app
           ports:
             - name: http
