@@ -51,8 +51,9 @@ jobs:
           command: |
             apt-get install -y nodejs npm
             npm install -g n
-            n 12
+            n stable
             cd src
+            rm -rf node_modules
             npm install
             npm run prod
       - save_cache:
