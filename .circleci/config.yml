@@ -71,6 +71,8 @@ jobs:
 
   build_job:
     executor: cloudsdk_executor
+    environment:
+      APP_ENV: prd
     steps:
       - attach_workspace:
           at: ~/workspace
@@ -95,14 +97,14 @@ jobs:
           name: gcloud auth
           command: |
             cd src
-            echo ${GKE_SERVICE_ACCOUNT_KEY} > ${HOME}/allabout-kubernetes-service-account.json
-            gcloud auth activate-service-account --key-file ${HOME}/allabout-kubernetes-service-account.json
+            echo ${GKE_SERVICE_ACCOUNT_KEY} > $HOME/allabout-kubernetes-service-account.json
+            gcloud auth activate-service-account --key-file $HOME/allabout-kubernetes-service-account.json
             gcloud auth configure-docker us-east1-docker.pkg.dev
       - run:
           name: build artifact and save artifact
           command: |
             docker build --file=cd/${APP_ENV}/php/Dockerfile \
-              --build-arg APP_ENV=prd \
+              --build-arg APP_ENV=${APP_ENV} \
               --build-arg APP_PATH=/var/www/${CIRCLE_PROJECT_REPONAME} \
               -t us-east1-docker.pkg.dev/o-taiji/${CIRCLE_PROJECT_REPONAME}/app:${CIRCLE_SHA1} .
             docker tag ${CIRCLE_PROJECT_REPONAME} us-east1-docker.pkg.dev/o-taiji/${CIRCLE_PROJECT_REPONAME}/app:${CIRCLE_SHA1}
@@ -116,6 +118,8 @@ jobs:
 
   deploy_job:
     executor: cloudsdk_executor
+    environment:
+      APP_ENV: prd
     steps:
       - attach_workspace:
           at: ~/workspace
@@ -129,16 +133,16 @@ jobs:
           name: exec deploy
           command: |
             cd cd/${APP_ENV}/manifest
-            envsubst < namespace.yaml > ${HOME}/namespace.yaml
-            envsubst < service.yaml > ${HOME}/service.yaml
-            envsubst < deployment.yaml > ${HOME}/deployment.yaml
-            envsubst < ingress.yaml > ${HOME}/ingress.yaml
-            envsubst < cert.yaml > ${HOME}/cert.yaml
-            kubectl apply -f ${HOME}/namespace.yaml
-            kubectl apply -f ${HOME}/service.yaml
-            kubectl apply -f ${HOME}/deployment.yaml
-            kubectl apply -f ${HOME}/ingress.yaml
-            kubectl apply -f ${HOME}/cert.yaml
+            envsubst < namespace.yaml > $HOME/namespace.yaml
+            envsubst < service.yaml > $HOME/service.yaml
+            envsubst < deployment.yaml > $HOME/deployment.yaml
+            envsubst < ingress.yaml > $HOME/ingress.yaml
+            envsubst < cert.yaml > $HOME/cert.yaml
+            kubectl apply -f $HOME/namespace.yaml
+            kubectl apply -f $HOME/service.yaml
+            kubectl apply -f $HOME/deployment.yaml
+            kubectl apply -f $HOME/ingress.yaml
+            kubectl apply -f $HOME/cert.yaml
       - run:
           name: confirm deploy
           command: |
