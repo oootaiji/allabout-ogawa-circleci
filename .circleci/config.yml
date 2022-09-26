@@ -49,11 +49,11 @@ jobs:
       - run:
           name: npm install
           command: |
-            apt-get install -y npm
+            apt-get install -y nodejs npm
             npm install -g n
             n stable
+            apt purge -y nodejs npm
             cd src
-            rm -rf node_modules
             npm install
             npm run prod
       - save_cache:
