@@ -2,7 +2,7 @@ apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
   namespace: ${NAMESPACE}
-  name: pod_disruption_budget
+  name: pod-disruption-budget
 spec:
   maxUnavailable: 2
   selector:

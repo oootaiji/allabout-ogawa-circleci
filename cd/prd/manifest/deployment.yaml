@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - image: gcr.io/google-samples/hello-app:1.0
-          name: app
+          name: app-container
           resources:
             requests:
               cpu: 100m
