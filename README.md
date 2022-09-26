@@ -63,26 +63,6 @@ dockerでローカル開発環境をつくり、それをcircleciでデプロイ
     gcloud auth login
     ```
 
-- 固定IP作成
-
-    ```
-    gcloud compute addresses create <固定IP名> --global
-    ```
-
-- 固定IP確認
-
-    ```
-    gcloud compute addresses describe <固定IP名> --global
-    ```
-
-- DNSの設定
-
-    ```
-    独自ドメインは持っているものを使う
-    上記のIPをAレコードで設定しておく
-    ```
-
-
 ## 手順
 ### 権限の設定
 

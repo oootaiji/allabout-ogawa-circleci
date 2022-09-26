@@ -80,16 +80,12 @@ CIとCDをまとめてやってくれる。アプリをビルドして問題な�
     - 同時実行とは、circleciのビルドの同時実行数制限のこと。プランによって同時実行数が制限されている。メンバー間も実行数は共有される。並列実行とは違う
 
 ## Github Actionsについて
-
 - GithubのCDツール
 - Microsoftのご加護
 
 
-## その他
-
-### apache
-
-apacheで不足していた知識
+## その他の学習
+### apacheで不足していた知識
 
 - conf-availableとconf-enabledの違い
     - https://qiita.com/naotwu/items/db8d07c5d747c530eb66
@@ -98,10 +94,7 @@ apacheで不足していた知識
         - a2enmod でmods-enabledからのシンボリックリンクが作成される
         - a3enconf でconf-enabledからのシンボリックリンクが作成される
 
-### docker
-
-dockerで不足していた知識
-
+### dockerで不足していた知識
 - docker-composeからdockerfileへ変数を渡す
     - https://qiita.com/Targityen/items/2717511ca9f12c1c667f
 - EXPOSE 80
@@ -114,9 +107,7 @@ dockerで不足していた知識
     - apt の方が基本だが、CLIとしては、apt-get が推奨されている
 
 
-### kubernetes
-
-kubernetesで不足していた知識
+### kubernetesで不足していた知識
 
 - RollingUpdate
     - Blue/Green Deploymentとは少し違う
