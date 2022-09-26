@@ -8,39 +8,47 @@ circleciとkubernetes(GKE)は実際に業務でつ分かれているため、理
 以前と違って、なるべく実務に近い形のLaravelでHello worldを出力させる
 
 
-## github
+## 成果物
 
+```
+Github (README.md, CircleCiの学習.md)
 https://github.com/oootaiji/allabout-ogawa-circleci
 
-## 条件
+アプリ (現在停止中)
+https://circleci.ogawa.allabout.oootaiji.com
+```
 
-dockerでローカル開発環境をつくり、それをcircleciでデプロイする
+## 目的・要件
+
+- 実践的学習
+    - 商用・業務で使うことを意識する
+- devopsの学習
+    - 本番環境はdockerコンテナが動いているが、ローカル開発環境もコンテナで動くようにする
+    - devopsを意識して、開発環境と本番環境の連携を容易にする
+- CircleCIの学習が主軸
 
 ### インフラ
-- GKE
-- Github
-- CircleCI
-    - orb使わない
-- セキュリティはある程度
-    - SSLあり
-    - VPCなし
-- 可用性はある程度
-    - ロードバランサあり
-    - 自動スケールなし
+- クラウド
+    - GKE (Google Kubernetes Engine)
+    - ロードバランサ (GKEのingress)
+    - DNS (公開ドメイン)
+    - SSL (証明書発行)
+    - やらない
+        - VPC (ネットワーク設計)
+        - HPA (オートスケール)
+- リポジトリ管理
+    - Github
+- CI/CD
+    - CircleCI (orb使わない)
 
 ### アプリ
-- コンテナ
-    - php:8.0-apache-buster
-        - + nodejs
-        - + composer
-    - redis
-- フレームワーク
-    - 最新Laravel (php8)
-- 機能
-    - hello worldだけ出力
+
+- 最新Laravel (php8)
+- hello worldだけ出力
+
 
 ## 準備
-### ローカル開発環境
+### 必須環境
 - OS
     - macOS
 - ツール
@@ -62,13 +70,11 @@ dockerでローカル開発環境をつくり、それをcircleciでデプロイ
     ```
     gcloud auth login
     ```
-
-## 手順
-### 権限の設定
+### サービスアカウントJSONの作成
 
 - IAMでサービスアカウントを作成
 
-### クラスターの設定
+### クラスターの作成
 - kubernetesクラスタ作成
 
     ```
@@ -89,7 +95,7 @@ dockerでローカル開発環境をつくり、それをcircleciでデプロイ
     https://console.cloud.google.com/kubernetes/list/overview?project=o-taiji
     ```
 
-### GCRの設定
+### レジストリの作成
 
 - gcrの認証 (us-east1)
     ```
@@ -109,7 +115,7 @@ dockerでローカル開発環境をつくり、それをcircleciでデプロイ
     https://console.cloud.google.com/artifacts/browse/o-taiji?project=o-taiji
     ```
 
-### DNSの設定
+### 固定IPの作成
 
 - 固定IP作成
 
@@ -131,12 +137,32 @@ dockerでローカル開発環境をつくり、それをcircleciでデプロイ
     circleci.ogawa.allabout.oootaiji.comへ上記のIPをAレコードで追加
     ```
 
-### デプロイ
+
+## 手順
+
+- ローカル開発環境構築
+- circleciのconfig.yaml作成
+- gkeデプロイのmanifestファイル作成
+- 準備手順が完了していれば、pushして自動デプロイされることを確認
+
+### 稼働確認
+
+- github確認
+
+    ```
+    https://github.com/oootaiji/allabout-ogawa-circleci
+    ```
 
 - circelci確認
 
     ```
     https://app.circleci.com/pipelines/github/oootaiji
+    ```
+
+- Web公開確認
+
+    ```
+    https://cirleci.ogawa.allabout.oootaiji.com
     ```
 
 ### 稼働確認
