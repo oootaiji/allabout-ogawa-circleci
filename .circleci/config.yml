@@ -33,9 +33,9 @@ jobs:
             php -r "unlink('composer-setup.php');"
             mv composer.phar /usr/local/bin/composer
             composer --version
-            composer config discard-changes true
             cd src
             pwd
+            composer config discard-changes true
             composer install -n --prefer-dist --no-dev
       - save_cache:
           name: save composer cache
