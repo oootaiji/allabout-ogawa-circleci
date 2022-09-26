@@ -143,6 +143,7 @@ jobs:
           environment:
             DEPLOYMENT_CONTAINER_IMAGE: us-east1-docker.pkg.dev/o-taiji/${CIRCLE_PROJECT_REPONAME}/app:${CIRCLE_SHA1}
             CERT_DOMAIN: circleci.ogawa.allabout.oootaiji.com
+            INGRESS_STATIC_IP: ${CIRCLE_PROJECT_REPONAME}-ip
           command: |
             cd cd/${PRO_APP_ENV}/manifest
             envsubst < namespace.yaml > $HOME/namespace.yaml
@@ -169,6 +170,6 @@ workflows:
       - deploy_job:
           requires:
             - build_job
-          # filters:
-          #   branches:
-          #     only: main
+          filters:
+            branches:
+              only: main

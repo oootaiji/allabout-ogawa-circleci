@@ -4,11 +4,11 @@ metadata:
   name: ingress
   namespace: ${CIRCLE_PROJECT_REPONAME}
   annotations:
-    kubernetes.io/ingress.global-static-ip-name: ${CIRCLE_PROJECT_REPONAME}-ip
+    kubernetes.io/ingress.global-static-ip-name: ${INGRESS_STATIC_IP}
     networking.gke.io/managed-certificates: cert
 spec:
   defaultBackend:
     service:
       name: service
       port:
-        number: 80
+        number: 8080
