@@ -196,6 +196,8 @@ ciecleciのジョブ実行時に渡せるようにしておく
     - CIとCDを分けることを意識
 
 ## 参考文献
+- [Ingress で HTTP(S) ロード バランシングを設定する](https://cloud.google.com/kubernetes-engine/docs/tutorials/http-balancer)
+- [外部負荷分散向け Ingress の構成](https://cloud.google.com/kubernetes-engine/docs/how-to/load-balance-ingress)
 - [CircleCI を使ってGKEへ自動デプロイ](https://qiita.com/wqwq/items/46a13019209aeafd2cec)
 - [docker pushでunauthorized](https://genzouw.com/entry/2022/02/05/080015/2918/)
 - [kubectl set imageについて(ローリングアップデート)](https://cloud.google.com/kubernetes-engine/docs/how-to/updating-apps?hl=ja)

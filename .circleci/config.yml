@@ -172,6 +172,8 @@ workflows:
           filters:
             tags:
               only: /^v.*/
+            branches:
+              ignore: /.*/
       - build_job:
           requires:
             - setup_job

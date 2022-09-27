@@ -158,11 +158,6 @@ CIとCDをまとめてやってくれる。アプリをビルドして問題な�
 
 ## 参考文献
 
-一番参考にした
-
-- [Ingress で HTTP(S) ロード バランシングを設定する](https://cloud.google.com/kubernetes-engine/docs/tutorials/http-balancer)
-
-
 記事
 
 - [いまさらだけどCircleCIに入門したので分かりやすくまとめてみた](https://qiita.com/gold-kou/items/4c7e62434af455e977c2)
@@ -177,3 +172,4 @@ CIとCDをまとめてやってくれる。アプリをビルドして問題な�
 - [CircleCIドキュメント](https://circleci.com/docs/ja)
 - [PodDisruptionBudgetのドキュメント](https://kubernetes.io/docs/tasks/run-application/configure-pdb/)
 - [Ingressのドキュメント](https://kubernetes.io/ja/docs/concepts/services-networking/ingress/)
+- [Serviceのドキュメント](https://kubernetes.io/ja/docs/concepts/services-networking/service/)
