@@ -157,12 +157,23 @@ CIとCDをまとめてやってくれる。アプリをビルドして問題な�
     - kubectl drainさせてPodを待機させる
 
 ## 参考文献
-- [Dockerドキュメント](https://docs.docker.jp/index.html)
-- [CircleCIドキュメント](https://circleci.com/docs/ja)
+
+一番参考にした
+
+- [Ingress で HTTP(S) ロード バランシングを設定する](https://cloud.google.com/kubernetes-engine/docs/tutorials/http-balancer)
+
+
+記事
+
 - [いまさらだけどCircleCIに入門したので分かりやすくまとめてみた](https://qiita.com/gold-kou/items/4c7e62434af455e977c2)
 - [PodとReplicaSetとDeploymentの関連]https://blog.a-know.me/entry/2018/08/14/185324
 - [NEGについて](https://christina04.hatenablog.com/entry/network-endpoint-group)
 - [PodDisruptionBudgetについて](https://qiita.com/tkusumi/items/946b0f31931d21a78058)
+- [Serviceタイプについて](https://zenn.dev/suiudou/articles/7dad08c5b64283)
+
+ドキュメント
+
+- [Dockerドキュメント](https://docs.docker.jp/index.html)
+- [CircleCIドキュメント](https://circleci.com/docs/ja)
 - [PodDisruptionBudgetのドキュメント](https://kubernetes.io/docs/tasks/run-application/configure-pdb/)
 - [Ingressのドキュメント](https://kubernetes.io/ja/docs/concepts/services-networking/ingress/)
-- [Serviceタイプについて](https://zenn.dev/suiudou/articles/7dad08c5b64283)

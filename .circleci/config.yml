@@ -170,6 +170,9 @@ workflows:
     jobs:
       - setup_job
       - build_job:
+          filters:
+            tags:
+              only: /^v.*/
           requires:
             - setup_job
       - deploy_job:
