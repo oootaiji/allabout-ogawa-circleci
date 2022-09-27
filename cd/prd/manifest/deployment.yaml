@@ -31,8 +31,3 @@ spec:
           env:
             - name: TZ
               value: Asia/Tokyo
-  strategy:
-    rollingUpdate:
-      maxSurge: 3
-      maxUnavailable: 3
-    type: RollingUpdate
