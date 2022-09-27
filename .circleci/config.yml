@@ -175,14 +175,16 @@ workflows:
             branches:
               ignore: /.*/
       - build_job:
+          requires:
+            - setup_job
           filters:
             tags:
               only: /^v.*/
-          requires:
-            - setup_job
       - deploy_job:
           requires:
             - build_job
           filters:
+            tags:
+              only: /^v.*/
             branches:
               only: main
