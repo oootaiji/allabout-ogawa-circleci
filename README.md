@@ -14,7 +14,7 @@ circleciとkubernetes(GKE)は実際に業務でつ分かれているため、理
 Github (README.md, CircleCiの学習.md)
 https://github.com/oootaiji/allabout-ogawa-circleci
 
-アプリ (現在停止中)
+アプリ (お金かかるため、現在停止中)
 https://circleci.ogawa.allabout.oootaiji.com
 ```
 
@@ -57,7 +57,19 @@ https://circleci.ogawa.allabout.oootaiji.com
     - kubectl
     - gcloud
 
-### GCP環境
+### 事前設定
+
+以下の項目を事前に設定しておく必要がある
+(デプロイ自動化はやることが多い)
+
+1. GKEの準備
+2. クラスターの作成
+3. レジストリの作成
+4. 公開用の固定IPの作成
+5. サービスアカウント(権限)JSONの作成
+6. CircleCIに環境変数を設定
+
+### 1. GKEの準備
 - GCPの Kubernetes Engine APIを有効にしておく
 
     ```
@@ -70,11 +82,8 @@ https://circleci.ogawa.allabout.oootaiji.com
     ```
     gcloud auth login
     ```
-### サービスアカウントJSONの作成
 
-- IAMでサービスアカウントを作成
-
-### クラスターの作成
+### 2. クラスターの作成
 - kubernetesクラスタ作成
 
     ```
@@ -95,7 +104,7 @@ https://circleci.ogawa.allabout.oootaiji.com
     https://console.cloud.google.com/kubernetes/list/overview?project=o-taiji
     ```
 
-### レジストリの作成
+### 3. レジストリの作成
 
 - gcrの認証 (us-east1)
     ```
@@ -115,7 +124,7 @@ https://circleci.ogawa.allabout.oootaiji.com
     https://console.cloud.google.com/artifacts/browse/o-taiji?project=o-taiji
     ```
 
-### 固定IPの作成
+### 4. 公開用の固定IPの作成
 
 - 固定IP作成
 
@@ -137,21 +146,31 @@ https://circleci.ogawa.allabout.oootaiji.com
     circleci.ogawa.allabout.oootaiji.comへ上記のIPをAレコードで追加
     ```
 
+### 5. サービスアカウントJSONの作成
+
+- IAMでサービスアカウントを作成
+    - 以下の3つのロールを入れておく
+        - Kubernetes Engine (とりあえず管理者でOK)
+        - Artifact Registry (とりあえず管理者でOK)
+        - ストレージ (とりあえず管理者でOK)
+
+### 6. CircleCIに環境変数を設定
+
+以下の２つにおいて、レポジトリに載せられない変数を登録しておき、
+ciecleciのジョブ実行時に渡せるようにしておく
+
+- Laravel本番環境用の.env
+- サービスアカウントJSON
+
 
 ## 手順
 
 - ローカル開発環境構築
 - circleciのconfig.yaml作成
-- gkeデプロイのmanifestファイル作成
+    - gkeデプロイのmanifestファイル作成
 - 準備手順が完了していれば、pushして自動デプロイされることを確認
 
 ### 稼働確認
-
-- github確認
-
-    ```
-    https://github.com/oootaiji/allabout-ogawa-circleci
-    ```
 
 - circelci確認
 
@@ -162,11 +181,19 @@ https://circleci.ogawa.allabout.oootaiji.com
 - Web公開確認
 
     ```
-    https://cirleci.ogawa.allabout.oootaiji.com
+    https://circleci.ogawa.allabout.oootaiji.com/
     ```
 
-### 稼働確認
 
+## さいごに
+
+- 本当はやりたかったこと
+    - コンテナイメージのビルドには時間がかかるので、ビルド済みのイメージをレジストリに用意しておくべき
+    - VPCは商用では必須なので、本当はVPCは組むべき
+    - CIの中心である自動テストもやりたかった
+- 次回やりたいこと
+    - Github Actionsで同じものを実装
+    - CIとCDを分けることを意識
 
 ## 参考文献
 - [CircleCI を使ってGKEへ自動デプロイ](https://qiita.com/wqwq/items/46a13019209aeafd2cec)
