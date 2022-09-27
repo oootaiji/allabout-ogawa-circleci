@@ -1,23 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: ${NAMESPACE}
-  name: app
-  labels:
-    run: app
+  namespace: default
+  name: web
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: app
+      app: web
   template:
     metadata:
       labels:
-        app: app
+        app: web
     spec:
       containers:
-        - image: gcr.io/google-samples/hello-app:1.0
-          name: app-container
+        - image: us-docker.pkg.dev/google-samples/containers/gke/hello-app:1.0
+          imagePullPolicy: IfNotPresent
+          name: web
           ports:
-            - name: http
-            - containerPort: 80
+            - containerPort: 8080
+              protocol: TCP

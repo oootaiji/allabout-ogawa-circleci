@@ -1,7 +1,7 @@
 apiVersion: networking.gke.io/v1
 kind: ManagedCertificate
 metadata:
-  namespace: ${NAMESPACE}
+  namespace: default
   name: cert
 spec:
   domains:

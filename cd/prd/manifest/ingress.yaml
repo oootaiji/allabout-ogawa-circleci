@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  namespace: ${NAMESPACE}
+  namespace: default
   name: ingress
   annotations:
     kubernetes.io/ingress.global-static-ip-name: ${INGRESS_STATIC_IP}
@@ -9,6 +9,6 @@ metadata:
 spec:
   defaultBackend:
     service:
-      name: app
+      name: web
       port:
         number: 8080
