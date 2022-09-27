@@ -30,9 +30,6 @@ RUN set -x \
 # copy app
 COPY . ${APP_PATH}
 
-# create app config cache
-RUN cd ${APP_PATH}/src \
-  && php artisan config:cache
 
 # copy config
 COPY ./cd/${APP_ENV}/php/apache2/apache2.conf /etc/apache2/apache2.conf
@@ -41,9 +38,6 @@ COPY ./cd/${APP_ENV}/php/apache2/mods-available/ /etc/apache2/mods-available/
 COPY ./cd/${APP_ENV}/php/apache2/conf-available/ /etc/apache2/conf-available/
 COPY ./cd/${APP_ENV}/php/php.ini /usr/local/etc/php/php.ini
 ## --------------環境別--------------
-
-RUN set -x \
-    && sed -ri -e 's!/var/www/!${APP_PATH}/src/public!' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
 # create apache config symboliclink
 RUN set -x \

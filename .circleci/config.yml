@@ -146,10 +146,6 @@ jobs:
             echo "export INGRESS_STATIC_IP=${CIRCLE_PROJECT_REPONAME}-ip" >> $BASH_ENV
             echo "export NAMESPACE=${CIRCLE_PROJECT_REPONAME}" >> $BASH_ENV
             source $BASH_ENV
-            echo ${DEPLOYMENT_CONTAINER_IMAGE}
-            echo ${CERT_DOMAIN}
-            echo ${INGRESS_STATIC_IP}
-            echo ${NAMESPACE}
       - run:
           name: exec deploy
           command: |
