@@ -164,10 +164,11 @@ jobs:
             kubectl apply -f $HOME/deployment.yaml
             kubectl apply -f $HOME/service.yaml
             kubectl apply -f $HOME/ingress.yaml
+            kubectl apply -f $HOME/pod-disruption-budget.yaml
       - run:
           name: confirm deploy
           command: |
-            kubectl rollout status deployment app -n ${CIRCLE_PROJECT_REPONAME}
+            kubectl rollout status deployment app
 workflows:
   deploy_workflow:
     jobs:
