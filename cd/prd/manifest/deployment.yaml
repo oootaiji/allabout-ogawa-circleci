@@ -20,4 +20,3 @@ spec:
           name: app-container
           ports:
           - containerPort: 80
-            protocol: TCP
